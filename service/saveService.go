@@ -1,10 +1,7 @@
 package service
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
 	"net/http"
-	"os"
 
 	"github.com/wdlea/SaveSystem/set"
 )
@@ -18,8 +15,6 @@ type SaveService[GameState_T IGameState] struct {
 	users   set.Set[User]
 
 	currentID uint64
-
-	cipher cipher.Block
 }
 
 // The interface which all GameStates derive from
@@ -36,17 +31,7 @@ func (s SaveService[GameState_T]) Listen(addr string) {
 // Initializes the SaveService
 // Note: this must be called
 func (s *SaveService[GameState_T]) Init() {
-	key := os.Getenv("KEY")
-	println("KEY: ", key)
-
-	var err error
-	s.cipher, err = aes.NewCipher([]byte(key))
-
 	s.users = set.MakeSet[User](1024)
-
-	if err != nil {
-		panic(err)
-	}
 }
 
 // Returns the users data, if
