@@ -1,4 +1,4 @@
-module SaveSystem
+module github.com/wdlea/SaveSystem
 
 go 1.20
 

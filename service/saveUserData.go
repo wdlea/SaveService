@@ -12,7 +12,7 @@ func (s SaveService[GameState_T]) SaveUserData(resp http.ResponseWriter, req *ht
 		resp.WriteHeader(403)
 		return
 	}
-	valid, user := s.DecryptUser([]byte(userCookie.Value))
+	valid, user := s.UserFromCookie(userCookie.Value)
 	if !valid {
 		resp.WriteHeader(403)
 		return

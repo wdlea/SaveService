@@ -1,7 +1,7 @@
 package main
 
 import (
-	"SaveSystem/service"
+	"github.com/wdlea/SaveSystem/service"
 
 	"github.com/joho/godotenv"
 )

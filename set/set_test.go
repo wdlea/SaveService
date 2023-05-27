@@ -1,9 +1,10 @@
 package set_test
 
 import (
-	"SaveSystem/set"
 	"math/rand"
 	"testing"
+
+	"github.com/wdlea/SaveSystem/set"
 )
 
 func TestSet(t *testing.T) {

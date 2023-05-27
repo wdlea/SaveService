@@ -2,8 +2,8 @@ package service
 
 import (
 	"crypto/rand"
+	"encoding/base64"
 	"encoding/binary"
-	"errors"
 	"math/big"
 )
 
@@ -26,48 +26,45 @@ func (s *SaveService[GameState_T]) MakeUser() (user User, err error) {
 	}
 	return
 }
-func (s *SaveService[GameState_T]) EncryptUser(u User) (encrypted []byte) {
-	encrypted = u.EncodeUser()
-
-	s.cipher.Encrypt(encrypted, encrypted)
-	return
-}
-func (s *SaveService[GameState_T]) DecryptUser(encrypted []byte) (valid bool, user User) {
-	decrypted := make([]byte, len(encrypted)+1)
-
-	defer func() {
-		if err := recover(); err != nil {
-			println(err)
-		}
-	}()
-
-	s.cipher.Decrypt(encrypted, decrypted)
-
-	user, err := DecodeUser(decrypted)
-	valid = err == nil
-
-	return
-}
-
-func (u User) EncodeUser() (encoded []byte) {
-	encoded = binary.LittleEndian.AppendUint64(encoded, u.ID)
-	encoded = binary.LittleEndian.AppendUint64(encoded, u.Key)
-	println("Encoded:", encoded)
-	return
-}
-func DecodeUser(encoded []byte) (u User, err error) {
-	if len(encoded) != 16 {
-		err = errors.New("encoded user not 16 bytes in length")
-	}
-
-	u = User{
-		ID:  binary.LittleEndian.Uint64(encoded[0:8]),
-		Key: binary.LittleEndian.Uint64(encoded[8:16]),
-	}
-
-	return
-}
 
 func (u User) Hash(size uint64) uint64 {
 	return u.ID % size
+}
+
+func (s SaveService[GameState_T]) UserToCookie(u User) (value string) {
+	encrypted := s.encryptUser(u)
+	value = base64.URLEncoding.EncodeToString(encrypted)
+	return
+}
+func (s SaveService[GameState_T]) UserFromCookie(value string) (valid bool, u User) {
+	encrypted, err := base64.URLEncoding.DecodeString(value)
+	if err != nil {
+		valid = false
+		return
+	}
+	valid, u = s.decryptUser(encrypted)
+	return
+}
+
+func (s SaveService[GameState_T]) encryptUser(u User) (ciphertext []byte) {
+	return u.packUser()
+}
+func (s SaveService[GameState_T]) decryptUser(ciphertext []byte) (valid bool, u User) {
+	return unpackUser(ciphertext)
+}
+
+func (u User) packUser() (packed []byte) {
+	packed = binary.BigEndian.AppendUint64(packed, u.ID)
+	packed = binary.BigEndian.AppendUint64(packed, u.Key)
+	return
+}
+func unpackUser(packed []byte) (valid bool, u User) {
+	if len(packed) != 16 {
+		valid = false
+		return
+	}
+
+	id_enc, key_enc := packed[:8], packed[8:]
+	u.ID, u.Key = binary.BigEndian.Uint64(id_enc), binary.BigEndian.Uint64(key_enc)
+	return
 }
