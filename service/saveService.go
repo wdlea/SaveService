@@ -22,9 +22,10 @@ type IGameState interface{}
 
 // Hosts the SaveService on a particular address
 func (s SaveService[GameState_T]) Listen(addr string) {
-	http.HandleFunc("/save", s.R_SaveUserData)
-	http.HandleFunc("/load", s.R_LoadUserData)
-	http.HandleFunc("/new", s.newUser)
+	http.HandleFunc("/save", s.r_SaveUserData)
+	http.HandleFunc("/load", s.r_LoadUserData)
+	http.HandleFunc("/new", s.r_NewUser)
+	http.HandleFunc("/delete", s.r_DeleteUser)
 
 	http.ListenAndServe(addr, nil)
 }

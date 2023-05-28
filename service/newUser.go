@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func (s SaveService[GameState_T]) newUser(resp http.ResponseWriter, req *http.Request) {
+func (s SaveService[GameState_T]) r_NewUser(resp http.ResponseWriter, req *http.Request) {
 	var cookie http.Cookie
 	cookie.Name = "user"
 

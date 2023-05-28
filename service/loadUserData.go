@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (s SaveService[GameState_T]) R_LoadUserData(resp http.ResponseWriter, req *http.Request) {
+func (s SaveService[GameState_T]) r_LoadUserData(resp http.ResponseWriter, req *http.Request) {
 	userCookie, err := req.Cookie("user")
 	if err != nil || userCookie == nil {
 		resp.WriteHeader(403)
