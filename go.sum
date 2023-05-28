@@ -1,2 +1,4 @@
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
+github.com/wdlea/set v1.0.0 h1:+N6ZZHLXvQLMmGIk2gJ14GJx/wBAXPWvlFP7xhn3yJk=
+github.com/wdlea/set v1.0.0/go.mod h1:lQ2X7/SZ8QxSVXdoAlEhRVU7+T7hbfouu2yuWR3DyFo=

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (s SaveService[GameState_T]) SaveUserData(resp http.ResponseWriter, req *http.Request) {
+func (s SaveService[GameState_T]) R_SaveUserData(resp http.ResponseWriter, req *http.Request) {
 	userCookie, err := req.Cookie("user")
 	if err != nil || userCookie == nil {
 		resp.WriteHeader(403)
@@ -21,6 +21,7 @@ func (s SaveService[GameState_T]) SaveUserData(resp http.ResponseWriter, req *ht
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
 		resp.WriteHeader(400)
+		resp.Write([]byte("No request body"))
 		return
 	}
 
@@ -28,12 +29,14 @@ func (s SaveService[GameState_T]) SaveUserData(resp http.ResponseWriter, req *ht
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		resp.WriteHeader(400)
+		resp.Write(append([]byte("Bad request body"+err.Error()), body...))
 		return
 	}
 
 	valid = s.SetUserData(user, data)
 	if !valid {
 		resp.WriteHeader(403)
+		resp.Write([]byte("Invalid user cookie"))
 		return
 	}
 	resp.WriteHeader(204)

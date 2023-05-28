@@ -16,8 +16,7 @@ const MAX_KEY_SIZE = 0xFFFFFFFFFFFFFFFF
 
 var maxKeySize *big.Int = big.NewInt(0).SetUint64(MAX_KEY_SIZE)
 
-
-//makes a new user with the next available ID
+// makes a new user with the next available ID
 func (s *SaveService[GameState_T]) MakeUser() (user User, err error) {
 	key, err := rand.Int(rand.Reader, maxKeySize)
 
@@ -26,6 +25,7 @@ func (s *SaveService[GameState_T]) MakeUser() (user User, err error) {
 		ID:  s.currentID,
 		Key: key.Uint64(),
 	}
+	s.users.Push(user)
 	return
 }
 

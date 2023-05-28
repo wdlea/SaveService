@@ -3,7 +3,7 @@ package service
 import (
 	"net/http"
 
-	"github.com/wdlea/SaveSystem/set"
+	"github.com/wdlea/set"
 )
 
 // A save service is the functionality of this code
@@ -22,7 +22,8 @@ type IGameState interface{}
 
 // Hosts the SaveService on a particular address
 func (s SaveService[GameState_T]) Listen(addr string) {
-	http.HandleFunc("/save", s.SaveUserData)
+	http.HandleFunc("/save", s.R_SaveUserData)
+	http.HandleFunc("/load", s.R_LoadUserData)
 	http.HandleFunc("/new", s.newUser)
 
 	http.ListenAndServe(addr, nil)
@@ -32,6 +33,7 @@ func (s SaveService[GameState_T]) Listen(addr string) {
 // Note: this must be called
 func (s *SaveService[GameState_T]) Init() {
 	s.users = set.MakeSet[User](1024)
+	s.entries = make(map[uint64]GameState_T)
 }
 
 // Returns the users data, if
