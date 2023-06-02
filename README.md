@@ -1,6 +1,10 @@
 # SaveService
 *A service designed to host game data, states ETC*
 
+> **WARNING**
+>
+> This is a work in progress, and as a result 
+
 SaveService is a service designed to allow users to store and load a *state* from a server. This state is a struct which is stored as a generic parameter, allowing your state to be most simple data types.
 
 > I made this for a larger project, it is attended to accompany a game which i will eventually make in TS using webgl bindings and a custom engine.
